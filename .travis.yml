@@ -1,0 +1,24 @@
+language: dart
+os: osx
+addons:
+  apt:
+    packages:
+      - lib32stdc++6
+before_install:
+  - echo -e "machine github.com\n login $GITHUB_TOKEN" > ~/.netrc
+  - brew install git-lfs
+  - git lfs install
+before_script:
+  git lfs pull
+install:
+  - git clone https://github.com/flutter/flutter.git -b stable --depth 1
+  - export PATH=./flutter/bin:$PATH
+  - flutter doctor
+  - flutter --version
+script:
+  - flutter packages get
+  - flutter analyze --no-pub --no-current-package lib/ test/
+  - flutter test --no-pub test/
+cache:
+  directories:
+    - $HOME/.pub-cache
